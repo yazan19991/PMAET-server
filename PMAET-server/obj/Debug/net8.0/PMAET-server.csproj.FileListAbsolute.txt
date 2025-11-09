@@ -1,0 +1,8 @@
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.csproj.AssemblyReference.cache
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.AssemblyInfoInputs.cache
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.AssemblyInfo.cs
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.csproj.CoreCompileInputs.cache
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\yazan\Desktop\GitHub\PMAET-server\PMAET-server\obj\Debug\net8.0\PMAET-server.sourcelink.json

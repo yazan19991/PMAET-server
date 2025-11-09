@@ -1,12 +1,71 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{05BEC8B2-586B-4B8A-9597-EA8490E71670}|PMAET-server\\PMAET-server.csproj|c:\\users\\yazan\\desktop\\github\\pmaet-server\\pmaet-server\\pmaet-server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{05BEC8B2-586B-4B8A-9597-EA8490E71670}|PMAET-server\\PMAET-server.csproj|solutionrelative:pmaet-server\\pmaet-server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05BEC8B2-586B-4B8A-9597-EA8490E71670}|PMAET-server\\PMAET-server.csproj|c:\\users\\yazan\\desktop\\github\\pmaet-server\\pmaet-server\\models\\del\\dbservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05BEC8B2-586B-4B8A-9597-EA8490E71670}|PMAET-server\\PMAET-server.csproj|solutionrelative:pmaet-server\\models\\del\\dbservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{05BEC8B2-586B-4B8A-9597-EA8490E71670}|PMAET-server\\PMAET-server.csproj|c:\\users\\yazan\\desktop\\github\\pmaet-server\\pmaet-server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{05BEC8B2-586B-4B8A-9597-EA8490E71670}|PMAET-server\\PMAET-server.csproj|solutionrelative:pmaet-server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PMAET-server",
+              "DocumentMoniker": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\PMAET-server\\PMAET-server.csproj",
+              "RelativeDocumentMoniker": "PMAET-server\\PMAET-server.csproj",
+              "ToolTip": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\PMAET-server\\PMAET-server.csproj",
+              "RelativeToolTip": "PMAET-server\\PMAET-server.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-09T22:42:25.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DBservices.cs",
+              "DocumentMoniker": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\PMAET-server\\Models\\DEL\\DBservices.cs",
+              "RelativeDocumentMoniker": "PMAET-server\\Models\\DEL\\DBservices.cs",
+              "ToolTip": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\PMAET-server\\Models\\DEL\\DBservices.cs",
+              "RelativeToolTip": "PMAET-server\\Models\\DEL\\DBservices.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-09T22:29:17.028Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\PMAET-server\\Program.cs",
+              "RelativeDocumentMoniker": "PMAET-server\\Program.cs",
+              "ToolTip": "C:\\Users\\yazan\\Desktop\\GitHub\\PMAET-server\\PMAET-server\\Program.cs",
+              "RelativeToolTip": "PMAET-server\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-09T16:55:10.481Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
