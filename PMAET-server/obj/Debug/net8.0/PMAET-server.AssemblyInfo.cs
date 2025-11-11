@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PMAET-server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43a881e5686b41c526d1d8618f2a049ebc19df38")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf0bf8a5fd78ce6061c888f279144bde68b10a3c")]
 [assembly: System.Reflection.AssemblyProductAttribute("PMAET-server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PMAET-server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
