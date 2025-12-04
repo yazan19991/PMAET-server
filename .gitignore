@@ -1,0 +1,15 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PMAET-server/appsettings.json
+/PMAET-server/bin
+/do not push
+/.vs/PMAET-server/FileContentIndex
+/PMAET-server/.specstory
+/.vs/ProjectEvaluation
+/PMAET-server/obj
+
+/PMAET-server
+/PMAET-server/obj/Debug
+/PMAET-server/obj/Debug/net8.0

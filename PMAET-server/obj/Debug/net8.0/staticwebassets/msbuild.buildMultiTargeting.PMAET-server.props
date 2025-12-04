@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\PMAET-server.props" />
-</Project>
