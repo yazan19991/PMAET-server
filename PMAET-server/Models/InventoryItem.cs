@@ -18,3 +18,5 @@ namespace PMAET_server.Models
         public Inventory? Inventory { get; set; }
     }
 }
+
+
