@@ -11,3 +11,11 @@
 /PMAET-server/obj
 /PMAET-server/Properties
 /.vs
+
+
+.vs/
+.vscode/
+.specstory/
+bin/
+obj/
+*.user
