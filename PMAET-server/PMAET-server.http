@@ -1,6 +1,58 @@
 @PMAET_server_HostAddress = http://localhost:5233
 
-GET {{PMAET_server_HostAddress}}/weatherforecast/
+### Get all inventories
+GET {{PMAET_server_HostAddress}}/api/Inventory/GetAll
 Accept: application/json
 
-###
+### Create inventory
+POST {{PMAET_server_HostAddress}}/api/Inventory/Create
+Content-Type: application/json
+
+{
+  "name": "Kitchen Pantry",
+  "description": "Main kitchen storage",
+  "userId": 1
+}
+
+### Update inventory
+PUT {{PMAET_server_HostAddress}}/api/Inventory/Update/1
+Content-Type: application/json
+
+{
+  "name": "Updated Kitchen Pantry",
+  "description": "Updated description"
+}
+
+### Delete inventory
+DELETE {{PMAET_server_HostAddress}}/api/Inventory/Delete/1
+
+### Add item
+POST {{PMAET_server_HostAddress}}/api/InventoryItem/Add
+Content-Type: application/json
+
+{
+  "inventoryId": 1,
+  "name": "Milk",
+  "quantity": 2,
+  "unit": "liter",
+  "expiryDate": "2026-06-15"
+}
+
+### Get items by inventory
+GET {{PMAET_server_HostAddress}}/api/InventoryItem/GetByInventory/1
+Accept: application/json
+
+### Update item
+PUT {{PMAET_server_HostAddress}}/api/InventoryItem/Update/1
+Content-Type: application/json
+
+{
+  "inventoryId": 1,
+  "name": "Milk",
+  "quantity": 1,
+  "unit": "liter",
+  "expiryDate": "2026-06-15"
+}
+
+### Delete item
+DELETE {{PMAET_server_HostAddress}}/api/InventoryItem/Delete/1

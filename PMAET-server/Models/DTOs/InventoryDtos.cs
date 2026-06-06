@@ -22,5 +22,10 @@ namespace PMAET_server.Models.DTOs
             public int ItemCount { get; set; } 
             public DateTime CreatedAt { get; set; }
         }
-    
+            public class InventoryUpdateDto
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Description { get; set; } = string.Empty;
+
+        }
 }

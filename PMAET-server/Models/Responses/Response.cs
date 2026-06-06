@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="data">The data to include in the response.</param>
         /// <param name="rm">The response message to include.</param>
-        public Response(T data, ResponseMessage rm)
+        public Response(T? data, ResponseMessage rm)
         {
             Data = data;
             Message = rm;

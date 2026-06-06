@@ -55,9 +55,9 @@ namespace PMAET_server.Controllers
 
                 return Ok(new Response<ItemResponseDto>(responseDto,new ResponseMessage(1,"Item added successfully")));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(new Response<ItemResponseDto>(null,new ResponseMessage(0,ex.Message)));
+                return BadRequest(new Response<ItemResponseDto>(null,new ResponseMessage(0,"Failed to add Item")));
             }
         }
 
@@ -84,10 +84,77 @@ namespace PMAET_server.Controllers
 
                 return Ok(new Response<List<ItemResponseDto>>(dtoList,new ResponseMessage(1,"Success")));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(new Response<List<ItemResponseDto>>(null,new ResponseMessage(0,ex.Message)));
+                return BadRequest(new Response<List<ItemResponseDto>>(null,new ResponseMessage(0,"Failed to get Items")));
             }
         }
+
+
+        [HttpPut("Update/{id}")]
+        public async Task<ActionResult<Response<ItemResponseDto>>> UpdateItem(int id, [FromBody] UpdateItemDto request)
+        {
+            try
+            {
+                var items = await _context.InventoryItems.FindAsync(id);
+                if (items == null) {
+                    return NotFound(new Response<ItemResponseDto>(null,new ResponseMessage(0,"Item not found")));
+                }
+                var inventoryExists = await _context.Inventories.AnyAsync(i => i.Id == request.InventoryId);
+                if (!inventoryExists)
+                {
+                    return NotFound(new Response<ItemResponseDto>(null,new ResponseMessage(0,"Inventory ID does not exist.")));
+                }
+
+                items.InventoryId = request.InventoryId;
+                items.Name = request.Name;
+                items.Quantity = request.Quantity;
+                items.Unit = request.Unit;
+                items.ExpiryDate = request.ExpiryDate;
+
+
+                await _context.SaveChangesAsync();
+
+                var responseDto = new ItemResponseDto
+                {
+                    Id = items.Id,
+                    Name = items.Name,
+                    Quantity = items.Quantity,
+                    Unit = items.Unit,
+                    ExpiryDate = items.ExpiryDate,
+                    PurchaseDate = items.PurchaseDate
+                };
+                return Ok(new Response<ItemResponseDto>(responseDto,new ResponseMessage(1,"Success")));
+            }
+            catch (Exception)
+            {
+                return BadRequest(new Response<ItemResponseDto>(null,new ResponseMessage(0,"Failed to Update Item")));
+            }
+
+        }
+//  ------
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult<Response<bool>>> DeleteItem(int id)
+        {
+            try
+            {
+                var item = await _context.InventoryItems.FindAsync(id);
+                if (item == null) {
+                    return NotFound(new Response<bool>(false,new ResponseMessage(0,"Item not found")));
+                }
+                _context.InventoryItems.Remove(item);
+                await _context.SaveChangesAsync();
+
+                return Ok(new Response<bool>(true,new ResponseMessage(1,"Success")));
+            }
+            catch (Exception)
+            {
+                return BadRequest(new Response<bool>(false,new ResponseMessage(0,"Failed to Delete Item")));
+            }
+
+        }
+
+
     }
 }

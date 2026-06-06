@@ -29,24 +29,31 @@ namespace PMAET_server.Controllers
                     .ToListAsync();
 
                 // Map to DTO
-                var dtoList = inventories.Select(inv => new InventoryResponseDto
+                var dtoList = new List<InventoryResponseDto>();
+                foreach (var inv in inventories)
                 {
-                    Id = inv.Id,
-                    Name = inv.Name,
-                    Description = inv.Description,
-                    CreatedAt = inv.CreatedAt,
-                    ItemCount = 0
-                }).ToList();
+                    var itemCount = await _context.InventoryItems
+                        .CountAsync(item => item.InventoryId == inv.Id);
+
+                    dtoList.Add(new InventoryResponseDto
+                    {
+                        Id = inv.Id,
+                        Name = inv.Name,
+                        Description = inv.Description,
+                        CreatedAt = inv.CreatedAt,
+                        ItemCount = itemCount
+                    });
+                }
 
                 // WRAP IT in your custom Response object
                 var response = new Response<List<InventoryResponseDto>>(dtoList, new ResponseMessage(1, "Success"));
 
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Return a clean error response instead of crashing
-                return BadRequest(new Response<List<InventoryResponseDto>>(null, new ResponseMessage(0, ex.Message)));
+                return BadRequest(new Response<List<InventoryResponseDto>>(null, new ResponseMessage(0,"Failed to get inventories")));
             }
         }
 
@@ -81,10 +88,75 @@ namespace PMAET_server.Controllers
 
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to create inventory: " + ex.Message)));
+                return BadRequest(new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to create inventory")));
             }
         }
+
+
+        // PUT: PUT api/Inventory/Update/{id}
+        [HttpPut("Update/{id}")]
+        public async Task<ActionResult<Response<InventoryResponseDto>>> UpdateInventory(int id,[FromBody] InventoryUpdateDto request)
+        {
+            try   
+            {
+
+                var inventory  = await _context.Inventories.FindAsync(id);
+                if (inventory == null)
+                {
+                    return NotFound(new Response<InventoryResponseDto>(null,new ResponseMessage(0,"Inventory ID does not exist")));
+                }
+
+                inventory .Name = request.Name;
+                inventory .Description = request.Description;
+                await _context.SaveChangesAsync();
+
+                var responseDto = new InventoryResponseDto
+                {
+                    Id = inventory .Id,
+                    Name =  inventory .Name,
+                    Description = inventory .Description,
+                    CreatedAt = inventory .CreatedAt
+                };
+
+                
+                var response = new Response<InventoryResponseDto>(responseDto,new ResponseMessage(1,"Inventory Updated successfully"));
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to Update inventory")));
+            }
+        }
+
+        // Delete: Delete api/Inventory/Delete/{id}
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult<Response<bool>>> DeleteInventory(int id)
+        {
+            try   
+            {
+
+                var inventory  = await _context.Inventories.FindAsync(id);
+                if (inventory == null)
+                {
+                    return NotFound(new Response<bool>(false,new ResponseMessage(0,"Inventory ID does not exist.")));
+                }
+
+                _context.Inventories.Remove(inventory);
+                await _context.SaveChangesAsync();
+
+                var response = new Response<bool>(true,new ResponseMessage(1,"Inventory Deleted successfully"));
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new Response<bool>(false, new ResponseMessage(0, "Failed to Delete inventory")));
+            }
+        }
+
+
     }
 }

@@ -30,4 +30,18 @@ namespace PMAET_server.Models.DTOs
         public bool IsExpired => ExpiryDate.HasValue && ExpiryDate.Value < DateTime.UtcNow;
         public int DaysUntilExpiry => ExpiryDate.HasValue ? (ExpiryDate.Value - DateTime.UtcNow).Days : 999;
     }
+
+
+    public class UpdateItemDto
+    {
+        [Required]
+        public int InventoryId { get; set; }
+
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+        public decimal Quantity { get; set; }
+        public string Unit { get; set; } = "pcs";
+        public DateTime? ExpiryDate { get; set; }
+    }
 }
