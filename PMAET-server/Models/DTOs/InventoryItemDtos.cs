@@ -9,9 +9,12 @@ namespace PMAET_server.Models.DTOs
         public int InventoryId { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
-
+        [Range(0.01, 999999)]
         public decimal Quantity { get; set; }
+        [Required]
+        [MaxLength(30)]
         public string Unit { get; set; } = "pcs";
         public DateTime? ExpiryDate { get; set; }
     }
@@ -38,9 +41,12 @@ namespace PMAET_server.Models.DTOs
         public int InventoryId { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
-
+        [Range(0.01, 999999)]
         public decimal Quantity { get; set; }
+        [Required]
+        [MaxLength(30)]
         public string Unit { get; set; } = "pcs";
         public DateTime? ExpiryDate { get; set; }
     }

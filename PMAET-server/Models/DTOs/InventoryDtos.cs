@@ -4,13 +4,15 @@ namespace PMAET_server.Models.DTOs
 {
         public class CreateInventoryDto
         {
-            [Required] // Validation: Name is mandatory
+            [Required] 
+            [MaxLength(100)]
             public string Name { get; set; } = string.Empty;
-
+            [MaxLength(500)]
             public string Description { get; set; } = string.Empty;
 
             // For now, we accept UserId manually. 
             // Later, we will get this automatically from the Login Token (JWT).
+            [Required]
             public int UserId { get; set; }
         }
 
@@ -23,8 +25,11 @@ namespace PMAET_server.Models.DTOs
             public DateTime CreatedAt { get; set; }
         }
             public class InventoryUpdateDto
-        {
+        {   
+            [Required]
+            [MaxLength(100)]
             public string Name { get; set; } = string.Empty;
+            [MaxLength(500)]
             public string Description { get; set; } = string.Empty;
 
         }
