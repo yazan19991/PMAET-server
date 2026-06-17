@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PMAET_server.Data;
-
+using PMAET_server.Services.Inventories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("myProjDB")));
 builder.Services.AddControllers();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
