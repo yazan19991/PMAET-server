@@ -8,9 +8,7 @@ namespace PMAET_server.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
-
         private readonly IInventoryService _inventoryService;
-
         public InventoryController(IInventoryService inventoryService)
         {
             _inventoryService = inventoryService;
@@ -20,40 +18,32 @@ namespace PMAET_server.Controllers
         public async Task<ActionResult<Response<List<InventoryResponseDto>>>> GetAllInventories()
         {
             var response = await _inventoryService.GetAllInventoriesAsync();
-
             if (response.Message?.Status == 0)
             {
                 return BadRequest(response);
             }
-
             return Ok(response);
         }
-
         // POST: api/Inventory/Create
         [HttpPost("Create")]
         public async Task<ActionResult<Response<InventoryResponseDto>>> CreateInventory([FromBody] CreateInventoryDto request)
         {
             var response = await _inventoryService.CreateInventoryAsync(request);
-
             if (response.Message?.Status == 0)
             {
                 return BadRequest(response);
             }
-
             return Ok(response);
         }
-
         // PUT: PUT api/Inventory/Update/{id}
         [HttpPut("Update/{id}")]
         public async Task<ActionResult<Response<InventoryResponseDto>>> UpdateInventory(int id, [FromBody] InventoryUpdateDto request)
         {
             var response = await _inventoryService.UpdateInventoryAsync(id, request);
-
             if (response.Message?.Status == 0)
             {
                 return NotFound(response);
             }
-
             return Ok(response);
         }
         // Delete: Delete api/Inventory/Delete/{id}
@@ -61,15 +51,11 @@ namespace PMAET_server.Controllers
         public async Task<ActionResult<Response<bool>>> DeleteInventory(int id)
         {
             var response = await _inventoryService.DeleteInventoryAsync(id);
-
             if (response.Message?.Status == 0)
             {
                 return NotFound(response);
             }
-
             return Ok(response);
         }
-
-
     }
 }

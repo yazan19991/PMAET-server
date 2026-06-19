@@ -1,0 +1,13 @@
+using PMAET_server.Models.DTOs;
+using PMAET_server.Models.Responses;
+
+namespace PMAET_server.Services.InventoryItems
+{
+    public interface IInventoryItemService
+    {
+        Task<Response<ItemResponseDto>> AddItemAsync(CreateItemDto request);
+        Task<Response<List<ItemResponseDto>>> GetItemsByInventoryAsync(int inventoryId);
+        Task<Response<ItemResponseDto>> UpdateItemAsync(int id, UpdateItemDto request);
+        Task<Response<bool>> DeleteItemAsync(int id);
+    }
+}
