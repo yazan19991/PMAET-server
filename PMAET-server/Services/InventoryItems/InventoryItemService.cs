@@ -23,7 +23,7 @@ namespace PMAET_server.Services.InventoryItems
                 var inventoryExists = await _context.Inventories.AnyAsync(i => i.Id == request.InventoryId);
                 if (!inventoryExists)
                 {
-                    return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Inventory ID does not exist."));
+                    return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Inventory ID does not exist.",ResponseCodes.NotFound));
                 }
 
                 var newItem = new InventoryItem
@@ -53,7 +53,7 @@ namespace PMAET_server.Services.InventoryItems
             }
             catch (Exception)
             {
-                return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Failed to add Item"));
+                return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Failed to add Item",ResponseCodes.ServerError));
             }
         }
 
@@ -81,7 +81,7 @@ namespace PMAET_server.Services.InventoryItems
             }
             catch (Exception)
             {
-                return new Response<List<ItemResponseDto>>(null, new ResponseMessage(0, "Failed to get Items"));
+                return new Response<List<ItemResponseDto>>(null, new ResponseMessage(0, "Failed to get Items",ResponseCodes.ServerError));
             }
         }
         public async Task<Response<ItemResponseDto>> UpdateItemAsync(int id, UpdateItemDto request)
@@ -91,12 +91,12 @@ namespace PMAET_server.Services.InventoryItems
                 var item = await _context.InventoryItems.FindAsync(id);
                 if (item == null)
                 {
-                    return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Item not found"));
+                    return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Item not found",ResponseCodes.NotFound));
                 }
                 var inventoryExists = await _context.Inventories.AnyAsync(i => i.Id == request.InventoryId);
                 if (!inventoryExists)
                 {
-                    return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Inventory ID does not exist."));
+                    return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Inventory ID does not exist.",ResponseCodes.NotFound));
                 }
 
                 item.InventoryId = request.InventoryId;
@@ -121,7 +121,7 @@ namespace PMAET_server.Services.InventoryItems
             }
             catch (Exception)
             {
-                return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Failed to Update Item"));
+                return new Response<ItemResponseDto>(null, new ResponseMessage(0, "Failed to Update Item",ResponseCodes.ServerError));
             }
 
 
@@ -133,7 +133,7 @@ namespace PMAET_server.Services.InventoryItems
                 var item = await _context.InventoryItems.FindAsync(id);
                 if (item == null)
                 {
-                    return new Response<bool>(false, new ResponseMessage(0, "Item not found"));
+                    return new Response<bool>(false, new ResponseMessage(0, "Item not found",ResponseCodes.NotFound));
                 }
                 _context.InventoryItems.Remove(item);
                 await _context.SaveChangesAsync();
@@ -142,7 +142,7 @@ namespace PMAET_server.Services.InventoryItems
             }
             catch (Exception)
             {
-                return new Response<bool>(false, new ResponseMessage(0, "Failed to Delete Item"));
+                return new Response<bool>(false, new ResponseMessage(0, "Failed to Delete Item",ResponseCodes.ServerError));
             }
 
         }

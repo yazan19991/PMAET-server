@@ -40,9 +40,13 @@ namespace PMAET_server.Controllers
         public async Task<ActionResult<Response<InventoryResponseDto>>> UpdateInventory(int id, [FromBody] InventoryUpdateDto request)
         {
             var response = await _inventoryService.UpdateInventoryAsync(id, request);
-            if (response.Message?.Status == 0)
+            if (response.Message?.Code == ResponseCodes.NotFound)
             {
                 return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
             }
             return Ok(response);
         }
@@ -51,9 +55,13 @@ namespace PMAET_server.Controllers
         public async Task<ActionResult<Response<bool>>> DeleteInventory(int id)
         {
             var response = await _inventoryService.DeleteInventoryAsync(id);
-            if (response.Message?.Status == 0)
+            if (response.Message?.Code == ResponseCodes.NotFound)
             {
                 return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
             }
             return Ok(response);
         }

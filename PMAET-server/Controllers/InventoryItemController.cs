@@ -20,6 +20,10 @@ namespace PMAET_server.Controllers
         public async Task<ActionResult<Response<ItemResponseDto>>> AddItem([FromBody] CreateItemDto request)
         {
             var response = await _inventoryItemService.AddItemAsync(request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
             if (response.Message?.Status == 0)
             {
                 return BadRequest(response);
@@ -43,7 +47,11 @@ namespace PMAET_server.Controllers
         [HttpPut("Update/{id}")]
         public async Task<ActionResult<Response<ItemResponseDto>>> UpdateItem(int id, [FromBody] UpdateItemDto request)
         {
-            var response = await _inventoryItemService.UpdateItemAsync(id,request);
+            var response = await _inventoryItemService.UpdateItemAsync(id, request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
             if (response.Message?.Status == 0)
             {
                 return BadRequest(response);
@@ -55,6 +63,10 @@ namespace PMAET_server.Controllers
         public async Task<ActionResult<Response<bool>>> DeleteItem(int id)
         {
             var response = await _inventoryItemService.DeleteItemAsync(id);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
             if (response.Message?.Status == 0)
             {
                 return BadRequest(response);

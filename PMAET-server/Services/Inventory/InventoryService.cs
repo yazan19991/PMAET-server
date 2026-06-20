@@ -41,7 +41,7 @@ namespace PMAET_server.Services.Inventories
             }
             catch(Exception)
             {
-              return new Response<List<InventoryResponseDto>>(null, new ResponseMessage(0,"Failed to get inventories"));
+              return new Response<List<InventoryResponseDto>>(null, new ResponseMessage(0,"Failed to get inventories",ResponseCodes.ServerError));
             }
         }
 
@@ -75,7 +75,7 @@ namespace PMAET_server.Services.Inventories
             }
             catch(Exception)
             {
-               return new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to create inventory"));
+               return new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to create inventory",ResponseCodes.ServerError));
             }
         }
 
@@ -86,7 +86,7 @@ namespace PMAET_server.Services.Inventories
                 var inventory  = await _context.Inventories.FindAsync(id);
                 if (inventory == null)
                 {
-                    return new Response<InventoryResponseDto>(null,new ResponseMessage(0,"Inventory ID does not exist"));
+                    return new Response<InventoryResponseDto>(null,new ResponseMessage(0,"Inventory ID does not exist",ResponseCodes.NotFound));
                 }
 
                 inventory .Name = request.Name;
@@ -108,7 +108,7 @@ namespace PMAET_server.Services.Inventories
             }
             catch(Exception)
             {
-                return new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to Update inventory"));
+                return new Response<InventoryResponseDto>(null, new ResponseMessage(0, "Failed to Update inventory",ResponseCodes.ServerError));
             }
         }
 
@@ -121,7 +121,7 @@ namespace PMAET_server.Services.Inventories
                 var inventory  = await _context.Inventories.FindAsync(id);
                 if (inventory == null)
                 {
-                    return new Response<bool>(false,new ResponseMessage(0,"Inventory ID does not exist."));
+                    return new Response<bool>(false,new ResponseMessage(0,"Inventory ID does not exist.", ResponseCodes.NotFound));
                 }
 
                 _context.Inventories.Remove(inventory);
@@ -132,7 +132,7 @@ namespace PMAET_server.Services.Inventories
             }
             catch(Exception)
             {
-               return new Response<bool>(false, new ResponseMessage(0, "Failed to Delete inventory"));
+               return new Response<bool>(false, new ResponseMessage(0, "Failed to Delete inventory",ResponseCodes.ServerError));
             }
         }
     }
