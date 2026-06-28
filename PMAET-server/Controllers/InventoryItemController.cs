@@ -43,6 +43,33 @@ namespace PMAET_server.Controllers
             return Ok(response);
         }
 
+        // GET: api/InventoryItem/Expired/
+        [HttpGet("Expired")]
+        public async Task<ActionResult<Response<List<ItemResponseDto>>>> GetExpiredItems()
+        {
+            var response = await _inventoryItemService.GetExpiredItemsAsync();
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+
+                // GET: api/InventoryItem/ExpiringSoon?days=7
+        [HttpGet("ExpiringSoon")]
+        public async Task<ActionResult<Response<List<ItemResponseDto>>>> GetExpiringSoonItems([FromQuery] int days = 7)
+        {
+            var response = await _inventoryItemService.GetExpiringSoonItemsAsync(days);
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+
+
 
         [HttpPut("Update/{id}")]
         public async Task<ActionResult<Response<ItemResponseDto>>> UpdateItem(int id, [FromBody] UpdateItemDto request)

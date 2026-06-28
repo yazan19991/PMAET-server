@@ -9,5 +9,7 @@ namespace PMAET_server.Services.InventoryItems
         Task<Response<List<ItemResponseDto>>> GetItemsByInventoryAsync(int inventoryId);
         Task<Response<ItemResponseDto>> UpdateItemAsync(int id, UpdateItemDto request);
         Task<Response<bool>> DeleteItemAsync(int id);
+        Task<Response<List<ItemResponseDto>>> GetExpiredItemsAsync();
+        Task<Response<List<ItemResponseDto>>> GetExpiringSoonItemsAsync(int days);
     }
 }
