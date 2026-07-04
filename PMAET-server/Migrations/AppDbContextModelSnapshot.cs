@@ -70,6 +70,9 @@ namespace PMAET_server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("NeverExpires")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 

@@ -86,6 +86,20 @@ namespace PMAET_server.Controllers
             return Ok(response);
         }
 
+        [HttpPost("Consume/{id}")]
+        public async Task<ActionResult<Response<decimal>>> ConsumeItem(int id, [FromBody] ConsumeItemDto request)
+        {
+            var response = await _inventoryItemService.ConsumeItemAsync(id,request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult<Response<bool>>> DeleteItem(int id)
         {

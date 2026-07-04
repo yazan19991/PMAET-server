@@ -11,5 +11,6 @@ namespace PMAET_server.Services.InventoryItems
         Task<Response<bool>> DeleteItemAsync(int id);
         Task<Response<List<ItemResponseDto>>> GetExpiredItemsAsync();
         Task<Response<List<ItemResponseDto>>> GetExpiringSoonItemsAsync(int days);
+        Task<Response<decimal>> ConsumeItemAsync(int id, ConsumeItemDto request);
     }
 }

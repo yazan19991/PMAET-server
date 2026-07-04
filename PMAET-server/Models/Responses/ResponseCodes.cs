@@ -4,5 +4,6 @@ namespace PMAET_server.Models.Responses
     {
         public const string NotFound = "NOT_FOUND";
         public const string ServerError = "SERVER_ERROR";
+        public const string ValidationError = "VALIDATION_ERROR";
     }
 }

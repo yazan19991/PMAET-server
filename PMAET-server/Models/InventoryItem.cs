@@ -12,10 +12,12 @@ namespace PMAET_server.Models
         public decimal Quantity { get; set; } 
         public string Unit { get; set; } = "pcs"; 
         public DateTime? ExpiryDate { get; set; }
+        public bool NeverExpires { get; set; } = false;
         public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
         public int InventoryId { get; set; }
         [ForeignKey("InventoryId")]
         public Inventory? Inventory { get; set; }
+        
     }
 }
 

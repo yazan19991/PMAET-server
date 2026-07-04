@@ -17,6 +17,7 @@ namespace PMAET_server.Models.DTOs
         [MaxLength(30)]
         public string Unit { get; set; } = "pcs";
         public DateTime? ExpiryDate { get; set; }
+        public bool NeverExpires { get; set; } = false;
     }
 
 
@@ -28,10 +29,10 @@ namespace PMAET_server.Models.DTOs
         public string Unit { get; set; } = string.Empty;
         public DateTime? ExpiryDate { get; set; }
         public DateTime PurchaseDate { get; set; }
-        
+        public bool NeverExpires { get; set; } = false;
         //Helper to tell frontend if it's expired
-        public bool IsExpired => ExpiryDate.HasValue && ExpiryDate.Value < DateTime.UtcNow;
-        public int DaysUntilExpiry => ExpiryDate.HasValue ? (ExpiryDate.Value - DateTime.UtcNow).Days : 999;
+        public bool IsExpired => !NeverExpires && ExpiryDate.HasValue && ExpiryDate.Value < DateTime.UtcNow;
+        public int DaysUntilExpiry => NeverExpires || !ExpiryDate.HasValue ? 999 : (ExpiryDate.Value - DateTime.UtcNow).Days;
     }
 
 
@@ -49,5 +50,12 @@ namespace PMAET_server.Models.DTOs
         [MaxLength(30)]
         public string Unit { get; set; } = "pcs";
         public DateTime? ExpiryDate { get; set; }
+        public bool NeverExpires { get; set; } = false;
+    }
+        public class ConsumeItemDto 
+    {
+        [Required]
+        [Range(0.01, 999999)]
+        public decimal Amount { get; set; }
     }
 }
