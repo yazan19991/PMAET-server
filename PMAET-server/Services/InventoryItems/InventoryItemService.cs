@@ -239,7 +239,7 @@ namespace PMAET_server.Services.InventoryItems
             catch (Exception)
             {
 
-                return new Response<decimal>(0, new ResponseMessage(0, "Failed to decrease the item quantity", ResponseCodes.ServerError));
+                return new Response<decimal>(0, new ResponseMessage(0, "Failed to consume item", ResponseCodes.ServerError));
             }
         }
     }
