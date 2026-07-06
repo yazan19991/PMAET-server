@@ -234,7 +234,7 @@ namespace PMAET_server.Services.InventoryItems
                 }
                 item.Quantity -= request.Amount;
                 await _context.SaveChangesAsync();
-                 return new Response<decimal>(item.Quantity, new ResponseMessage(1, "Item consumed successfully"));
+                return new Response<decimal>(item.Quantity, new ResponseMessage(1, "Item consumed successfully"));
             }
             catch (Exception)
             {
@@ -242,6 +242,33 @@ namespace PMAET_server.Services.InventoryItems
                 return new Response<decimal>(0, new ResponseMessage(0, "Failed to consume item", ResponseCodes.ServerError));
             }
         }
+
+        public async Task<Response<decimal>> PurchaseItemAsync(int id, PurchaseItemDto request)
+        {
+            try
+            {
+                var item = await _context.InventoryItems.FindAsync(id);
+                if (item == null)
+                {
+                    return new Response<decimal>(0, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+                if (request.Amount <= 0)
+                {
+                    return new Response<decimal>(0, new ResponseMessage(0, "Amount must be greater than zero", ResponseCodes.ValidationError));
+                }
+                item.Quantity += request.Amount;
+                await _context.SaveChangesAsync();
+                return new Response<decimal>(item.Quantity, new ResponseMessage(1, "Item purchased successfully"));
+            }
+            catch (Exception)
+            {
+
+                return new Response<decimal>(0, new ResponseMessage(0, "Failed to purchase item", ResponseCodes.ServerError));
+            }
+        }
+
+
+
     }
 
 }

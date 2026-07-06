@@ -100,6 +100,22 @@ namespace PMAET_server.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("Purchase/{id}")]
+        public async Task<ActionResult<Response<decimal>>> PurchaseItem(int id, [FromBody] PurchaseItemDto request)
+        {
+            var response = await _inventoryItemService.PurchaseItemAsync(id,request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult<Response<bool>>> DeleteItem(int id)
         {

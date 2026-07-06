@@ -52,7 +52,13 @@ namespace PMAET_server.Models.DTOs
         public DateTime? ExpiryDate { get; set; }
         public bool NeverExpires { get; set; } = false;
     }
-        public class ConsumeItemDto 
+    public class ConsumeItemDto
+    {
+        [Required]
+        [Range(0.01, 999999)]
+        public decimal Amount { get; set; }
+    }
+    public class PurchaseItemDto
     {
         [Required]
         [Range(0.01, 999999)]
