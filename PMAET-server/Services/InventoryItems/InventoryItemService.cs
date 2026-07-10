@@ -233,6 +233,14 @@ namespace PMAET_server.Services.InventoryItems
                     return new Response<decimal>(0, new ResponseMessage(0, "Not enough stock to consume the requested amount", ResponseCodes.ValidationError));
                 }
                 item.Quantity -= request.Amount;
+                var newTransaction = new StockTransaction
+                {
+                    InventoryItemId = item.Id,
+                    Type = "Consume",
+                    QuantityChanged = -request.Amount,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.StockTransactions.Add(newTransaction);
                 await _context.SaveChangesAsync();
                 return new Response<decimal>(item.Quantity, new ResponseMessage(1, "Item consumed successfully"));
             }
@@ -257,6 +265,15 @@ namespace PMAET_server.Services.InventoryItems
                     return new Response<decimal>(0, new ResponseMessage(0, "Amount must be greater than zero", ResponseCodes.ValidationError));
                 }
                 item.Quantity += request.Amount;
+
+                var newTransaction = new StockTransaction
+                {
+                    InventoryItemId = item.Id,
+                    Type = "Purchase",
+                    QuantityChanged = request.Amount,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.StockTransactions.Add(newTransaction);
                 await _context.SaveChangesAsync();
                 return new Response<decimal>(item.Quantity, new ResponseMessage(1, "Item purchased successfully"));
             }
@@ -266,9 +283,34 @@ namespace PMAET_server.Services.InventoryItems
                 return new Response<decimal>(0, new ResponseMessage(0, "Failed to purchase item", ResponseCodes.ServerError));
             }
         }
-
-
-
+        public async Task<Response<List<StockTransactionResponseDto>>> GetItemTransactionsAsync(int itemId)
+        {
+            try
+            {
+                var item = await _context.InventoryItems.FindAsync(itemId);
+                if (item == null)
+                {
+                    return new Response<List<StockTransactionResponseDto>>(null, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+                var items = await _context.StockTransactions
+                    .Where(i => i.InventoryItemId == itemId)
+                    .OrderByDescending(i => i.CreatedAt)
+                    .ToListAsync();
+                var dtoList = items.Select(i => new StockTransactionResponseDto
+                {
+                    Id = i.Id,
+                    InventoryItemId = i.InventoryItemId,
+                    Type = i.Type,
+                    QuantityChanged = i.QuantityChanged,
+                    CreatedAt = i.CreatedAt,
+                }).ToList();
+                return new Response<List<StockTransactionResponseDto>>(dtoList, new ResponseMessage(1, "Transactions retrieved successfully"));
+            }
+            catch (Exception)
+            {
+                return new Response<List<StockTransactionResponseDto>>(null, new ResponseMessage(0, "Failed to retrieve transactions", ResponseCodes.ServerError));
+            }
+        }
     }
 
 }

@@ -90,6 +90,34 @@ namespace PMAET_server.Migrations
                     b.ToTable("InventoryItems");
                 });
 
+            modelBuilder.Entity("PMAET_server.Models.StockTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InventoryItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("QuantityChanged")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryItemId");
+
+                    b.ToTable("StockTransactions");
+                });
+
             modelBuilder.Entity("PMAET_server.Models.InventoryItem", b =>
                 {
                     b.HasOne("PMAET_server.Models.Inventory", "Inventory")
@@ -99,6 +127,17 @@ namespace PMAET_server.Migrations
                         .IsRequired();
 
                     b.Navigation("Inventory");
+                });
+
+            modelBuilder.Entity("PMAET_server.Models.StockTransaction", b =>
+                {
+                    b.HasOne("PMAET_server.Models.InventoryItem", "InventoryItem")
+                        .WithMany()
+                        .HasForeignKey("InventoryItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
                 });
 #pragma warning restore 612, 618
         }

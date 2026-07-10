@@ -13,5 +13,6 @@ namespace PMAET_server.Data
         // This tells EF Core: "I have a table called Inventories"
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
+        public DbSet<StockTransaction> StockTransactions { get; set; }
     }
 }

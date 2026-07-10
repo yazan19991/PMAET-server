@@ -131,5 +131,21 @@ namespace PMAET_server.Controllers
             return Ok(response);
 
         }
+        //GET /api/InventoryItem/{id}/Transactions
+        [HttpGet("{id}/Transactions")]
+        public async Task<ActionResult<Response<List<StockTransactionResponseDto>>>> GetItemTransactions(int id)
+        {
+            var response = await _inventoryItemService.GetItemTransactionsAsync(id);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            
+            return Ok(response);
+        }
     }
 }

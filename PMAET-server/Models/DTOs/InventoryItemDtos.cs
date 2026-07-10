@@ -60,8 +60,20 @@ namespace PMAET_server.Models.DTOs
     }
     public class PurchaseItemDto
     {
+        
         [Required]
         [Range(0.01, 999999)]
         public decimal Amount { get; set; }
     }
+
+    public class StockTransactionResponseDto
+{
+    public int Id { get; set; }
+    public int InventoryItemId { get; set; }
+    public string Type { get; set; } = string.Empty;
+    public decimal QuantityChanged { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+
 }
