@@ -22,6 +22,21 @@ namespace PMAET_server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("InventoryItemLabel", b =>
+                {
+                    b.Property<int>("InventoryItemsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LabelsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InventoryItemsId", "LabelsId");
+
+                    b.HasIndex("LabelsId");
+
+                    b.ToTable("InventoryItemLabel");
+                });
+
             modelBuilder.Entity("PMAET_server.Models.Inventory", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +105,23 @@ namespace PMAET_server.Migrations
                     b.ToTable("InventoryItems");
                 });
 
+            modelBuilder.Entity("PMAET_server.Models.Label", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Labels");
+                });
+
             modelBuilder.Entity("PMAET_server.Models.StockTransaction", b =>
                 {
                     b.Property<int>("Id")
@@ -116,6 +148,21 @@ namespace PMAET_server.Migrations
                     b.HasIndex("InventoryItemId");
 
                     b.ToTable("StockTransactions");
+                });
+
+            modelBuilder.Entity("InventoryItemLabel", b =>
+                {
+                    b.HasOne("PMAET_server.Models.InventoryItem", null)
+                        .WithMany()
+                        .HasForeignKey("InventoryItemsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PMAET_server.Models.Label", null)
+                        .WithMany()
+                        .HasForeignKey("LabelsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PMAET_server.Models.InventoryItem", b =>

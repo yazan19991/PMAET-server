@@ -14,5 +14,11 @@ namespace PMAET_server.Services.InventoryItems
         Task<Response<decimal>> ConsumeItemAsync(int id, ConsumeItemDto request);
         Task<Response<decimal>> PurchaseItemAsync(int id, PurchaseItemDto request);
         Task<Response<List<StockTransactionResponseDto>>> GetItemTransactionsAsync(int itemId);
+
+        Task<Response<bool>> CreateAndAddLabelAsync(CreateAndAddLabelDto request,int itemId);
+        Task<Response<bool>> RemoveAssignedLabelAsync(int itemId,int labelId);
+        Task<Response<List<LabelResponseDto>>> GetItemLabelsAsync(int itemId);
+
+        Task<Response<List<ItemResponseDto>>> GetItemsByLabelAsync(GetItemByLabelDto request);
     }
 }

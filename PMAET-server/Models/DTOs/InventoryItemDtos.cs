@@ -60,20 +60,50 @@ namespace PMAET_server.Models.DTOs
     }
     public class PurchaseItemDto
     {
-        
+
         [Required]
         [Range(0.01, 999999)]
         public decimal Amount { get; set; }
     }
 
     public class StockTransactionResponseDto
-{
-    public int Id { get; set; }
-    public int InventoryItemId { get; set; }
-    public string Type { get; set; } = string.Empty;
-    public decimal QuantityChanged { get; set; }
-    public DateTime CreatedAt { get; set; }
-}
+    {
+        public int Id { get; set; }
+        public int InventoryItemId { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public decimal QuantityChanged { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
 
+    public class CreateAndAddLabelDto
+    {
 
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+    }
+    public class LabelResponseDto
+    {
+
+        public int Id { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+    }
+    public class AssignLabelDto
+    {
+
+        [Required]
+        public int LabelId { get; set; }
+        [Required]
+        public int ItemId { get; set; }
+    }
+    public class GetItemByLabelDto
+    {
+
+        [Required]
+        public int LabelId { get; set; }
+        [Required]
+        public int Userid { get; set; }
+    }
 }

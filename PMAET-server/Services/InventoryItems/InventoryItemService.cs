@@ -311,6 +311,135 @@ namespace PMAET_server.Services.InventoryItems
                 return new Response<List<StockTransactionResponseDto>>(null, new ResponseMessage(0, "Failed to retrieve transactions", ResponseCodes.ServerError));
             }
         }
+
+        public async Task<Response<bool>> CreateAndAddLabelAsync(CreateAndAddLabelDto request, int itemId)
+        {
+            try
+            {
+                var labelName = request.Name.Trim();
+                if (string.IsNullOrWhiteSpace(labelName))
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Label name is required", ResponseCodes.ValidationError));
+                }
+                var label = await _context.Labels 
+                    .FirstOrDefaultAsync(l => l.Name.ToLower() == labelName.ToLower());
+                if (label == null)
+                {
+                    var newLabel = new Label
+                    {
+                        Name = labelName,
+                    };
+                    _context.Labels.Add(newLabel);
+                    await _context.SaveChangesAsync();
+                    label = newLabel;
+                }
+                var item = await _context.InventoryItems
+                    .Include(i => i.Labels )
+                    .SingleOrDefaultAsync(i => i.Id == itemId);
+                if (item == null)
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+                if (item.Labels!.Any(l => l.Name == label.Name))
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Label already assigned to this item",ResponseCodes.ValidationError));
+                }
+                item.Labels.Add(label);
+                await _context.SaveChangesAsync();
+                return new Response<bool>(true, new ResponseMessage(1, "label added successfully"));
+            }
+            catch (Exception)
+            {
+                return new Response<bool>(false, new ResponseMessage(0, "Failed to add label", ResponseCodes.ServerError));
+            }
+        }
+
+        public async Task<Response<bool>> RemoveAssignedLabelAsync(int itemId,int labelId)
+        {
+            try
+            {
+                var item = await _context.InventoryItems
+                    .Include(i => i.Labels)
+                    .SingleOrDefaultAsync(i => i.Id == itemId);
+                if (item == null)
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+
+                var label = item.Labels!.SingleOrDefault(l => l.Id == labelId);
+                if (label == null)
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Label is not assigned to this item", ResponseCodes.NotFound));
+                }
+
+                item.Labels.Remove(label);
+                await _context.SaveChangesAsync();
+
+                return new Response<bool>(true, new ResponseMessage(1, "Label removed successfully"));
+            }
+            catch (Exception)
+            {
+                return new Response<bool>(false, new ResponseMessage(0, "Failed to remove label", ResponseCodes.ServerError));
+            }
+        }
+
+        public async Task<Response<List<LabelResponseDto>>> GetItemLabelsAsync(int itemId)
+        {
+            try
+            {
+                var item = await _context.InventoryItems
+                    .AsNoTracking()
+                    .Include(i => i.Labels)
+                    .SingleOrDefaultAsync(i => i.Id == itemId);
+                if (item == null)
+                {
+                    return new Response<List<LabelResponseDto>>(null, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+
+                var labels = item.Labels!
+                    .Select(label => new LabelResponseDto
+                    {
+                        Id = label.Id,
+                        Name = label.Name,
+                    })
+                    .ToList();
+
+                return new Response<List<LabelResponseDto>>(labels, new ResponseMessage(1, "Labels retrieved successfully"));
+            }
+            catch (Exception)
+            {
+                return new Response<List<LabelResponseDto>>(null, new ResponseMessage(0, "Failed to retrieve labels", ResponseCodes.ServerError));
+            }
+        }
+
+        public async Task<Response<List<ItemResponseDto>>> GetItemsByLabelAsync(GetItemByLabelDto request)
+        {
+            try
+            {
+                var items = await _context.InventoryItems
+                    .AsNoTracking()
+                    .Where(item => item.Inventory != null
+                        && item.Inventory.UserId == request.Userid
+                        && item.Labels!.Any(label => label.Id == request.LabelId))
+                    .Select(item => new ItemResponseDto
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Quantity = item.Quantity,
+                        Unit = item.Unit,
+                        ExpiryDate = item.ExpiryDate,
+                        PurchaseDate = item.PurchaseDate,
+                        NeverExpires = item.NeverExpires
+                    })
+                    .ToListAsync();
+
+                return new Response<List<ItemResponseDto>>(items, new ResponseMessage(1, "Items retrieved successfully"));
+            }
+            catch (Exception)
+            {
+                return new Response<List<ItemResponseDto>>(null, new ResponseMessage(0, "Failed to retrieve items", ResponseCodes.ServerError));
+            }
+        }
     }
 
 }

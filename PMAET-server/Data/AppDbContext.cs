@@ -14,5 +14,7 @@ namespace PMAET_server.Data
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<StockTransaction> StockTransactions { get; set; }
+        public DbSet<Label> Labels  { get; set; }
+
     }
 }

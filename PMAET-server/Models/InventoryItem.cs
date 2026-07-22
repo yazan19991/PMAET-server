@@ -18,6 +18,7 @@ namespace PMAET_server.Models
         [ForeignKey("InventoryId")]
         public Inventory? Inventory { get; set; }
         
+        public List<Label> Labels  { get; set; } = new();
     }
 }
 

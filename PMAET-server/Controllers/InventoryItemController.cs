@@ -31,6 +31,71 @@ namespace PMAET_server.Controllers
             return Ok(response);
         }
 
+        // POST: /api/InventoryItem/{itemId}/Labels
+        [HttpPost("{itemId}/Labels")]
+        public async Task<ActionResult<Response<bool>>> AddLabelToItem([FromBody] CreateAndAddLabelDto request,int itemId)
+        {
+            var response = await _inventoryItemService.CreateAndAddLabelAsync(request,itemId);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+
+        // Delete: /api/InventoryItem/{itemId}/Labels/{labelId}
+        [HttpDelete("{itemId}/Labels/{labelId}")]
+        public async Task<ActionResult<Response<bool>>> RemoveAssignedLabel(int itemId,int labelId)
+        {
+            var response = await _inventoryItemService.RemoveAssignedLabelAsync( itemId, labelId);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+        // Get: /api/InventoryItem/{itemId}/Labels
+        [HttpGet("{itemId}/Labels")]
+        public async Task<ActionResult<Response<List<LabelResponseDto>>>> GetItemLabels(int itemId)
+        {
+            var response = await _inventoryItemService.GetItemLabelsAsync(itemId);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+        // Get: api/InventoryItem/GetItemByLabel
+        [HttpGet("GetItemByLabel")]
+        public async Task<ActionResult<Response<List<ItemResponseDto>>>> GetItemByLabel([FromQuery] GetItemByLabelDto request)
+        {
+            var response = await _inventoryItemService.GetItemsByLabelAsync(request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+
+
         // GET: api/InventoryItem/GetByInventory/
         [HttpGet("GetByInventory/{inventoryId}")]
         public async Task<ActionResult<Response<List<ItemResponseDto>>>> GetItems(int inventoryId)
