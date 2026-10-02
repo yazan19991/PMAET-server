@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PMAET_server.Data;
 using PMAET_server.Services.Inventories;
 using PMAET_server.Services.InventoryItems;
+using PMAET_server.Services.ShoppingList;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryItemService, InventoryItemService>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

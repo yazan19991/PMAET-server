@@ -20,5 +20,12 @@ namespace PMAET_server.Services.InventoryItems
         Task<Response<List<LabelResponseDto>>> GetItemLabelsAsync(int itemId);
 
         Task<Response<List<ItemResponseDto>>> GetItemsByLabelAsync(GetItemByLabelDto request);
+
+        Task<Response<bool>> SetLowStockRuleAsync(int itemId, LowStockRuleDto request);
+        Task<Response<LowStockRuleDto>> GetItemRuleAsync(int itemId);
+        Task<Response<bool>> DeleteStockRuleAsync(int itemId);
+        Task<Response<List<ItemResponseDto>>> GetLowStockItemAsync(GetLowStockItemDto request );
+
+
     }
 }

@@ -19,6 +19,8 @@ namespace PMAET_server.Models
         public Inventory? Inventory { get; set; }
         
         public List<Label> Labels  { get; set; } = new();
+       
+        public LowStockRule? StockRule  { get; set; } = null;
     }
 }
 

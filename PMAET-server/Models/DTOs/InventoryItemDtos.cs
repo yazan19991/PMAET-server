@@ -106,4 +106,20 @@ namespace PMAET_server.Models.DTOs
         [Required]
         public int Userid { get; set; }
     }
+
+    public class LowStockRuleDto
+    {
+
+        [Required]
+        [Range(0.01, 999999)]
+        public decimal Amount { get; set; }
+
+    }
+
+    public class GetLowStockItemDto
+    {
+        [Required]
+        public int Userid { get; set; }
+
+    }
 }

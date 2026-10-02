@@ -212,5 +212,82 @@ namespace PMAET_server.Controllers
             
             return Ok(response);
         }
+  
+       // low-stock rule
+        //Post /api/InventoryItem/{itemId}/LowStockRule
+        [HttpPost("{itemId}/LowStockRule")]
+        public async Task<ActionResult<Response<bool>>> SetLowStockRule(int itemId, [FromBody] LowStockRuleDto request)
+        {
+            var response = await _inventoryItemService.SetLowStockRuleAsync(itemId,request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        //GET /api/InventoryItem/{itemId}/LowStockRule
+        [HttpGet("{itemId}/LowStockRule")]
+        public async Task<ActionResult<Response<LowStockRuleDto>>> GetItemRule(int itemId)
+        {
+            var response = await _inventoryItemService.GetItemRuleAsync(itemId);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            
+            return Ok(response);
+        }
+
+        //Delete /api/InventoryItem/{itemId}/LowStockRule
+        [HttpDelete("{itemId}/LowStockRule")]
+        public async Task<ActionResult<Response<bool>>> DeleteStockRule(int itemId)
+        {
+            var response = await _inventoryItemService.DeleteStockRuleAsync(itemId);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+        }
+
+        //GET /api/InventoryItem/LowStock
+        [HttpGet("LowStock")]
+        public async Task<ActionResult<Response<List<ItemResponseDto>>>> GetLowStockItem([FromQuery] GetLowStockItemDto request)
+        {
+            var response = await _inventoryItemService.GetLowStockItemAsync(request);
+            if (response.Message?.Code == ResponseCodes.NotFound)
+            {
+                return NotFound(response);
+            }
+            if (response.Message?.Status == 0)
+            {
+                return BadRequest(response);
+            }
+            
+            return Ok(response);
+        }
+
+
+
+
+
+
+
+
+
     }
 }

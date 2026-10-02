@@ -92,7 +92,8 @@ namespace PMAET_server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<string>("Unit")
                         .IsRequired()
@@ -122,6 +123,69 @@ namespace PMAET_server.Migrations
                     b.ToTable("Labels");
                 });
 
+            modelBuilder.Entity("PMAET_server.Models.LowStockRule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InventoryItemId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MinimumQuantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryItemId")
+                        .IsUnique();
+
+                    b.ToTable("LowStockRules");
+                });
+
+            modelBuilder.Entity("PMAET_server.Models.ShoppingListItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPurchased")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PurchasedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShoppingListItems");
+                });
+
             modelBuilder.Entity("PMAET_server.Models.StockTransaction", b =>
                 {
                     b.Property<int>("Id")
@@ -137,7 +201,8 @@ namespace PMAET_server.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("QuantityChanged")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -176,6 +241,17 @@ namespace PMAET_server.Migrations
                     b.Navigation("Inventory");
                 });
 
+            modelBuilder.Entity("PMAET_server.Models.LowStockRule", b =>
+                {
+                    b.HasOne("PMAET_server.Models.InventoryItem", "InventoryItem")
+                        .WithOne("StockRule")
+                        .HasForeignKey("PMAET_server.Models.LowStockRule", "InventoryItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
+                });
+
             modelBuilder.Entity("PMAET_server.Models.StockTransaction", b =>
                 {
                     b.HasOne("PMAET_server.Models.InventoryItem", "InventoryItem")
@@ -185,6 +261,11 @@ namespace PMAET_server.Migrations
                         .IsRequired();
 
                     b.Navigation("InventoryItem");
+                });
+
+            modelBuilder.Entity("PMAET_server.Models.InventoryItem", b =>
+                {
+                    b.Navigation("StockRule");
                 });
 #pragma warning restore 612, 618
         }

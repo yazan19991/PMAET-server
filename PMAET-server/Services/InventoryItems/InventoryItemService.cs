@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using PMAET_server.Data;
 using PMAET_server.Models;
 using PMAET_server.Models.DTOs;
@@ -321,7 +320,7 @@ namespace PMAET_server.Services.InventoryItems
                 {
                     return new Response<bool>(false, new ResponseMessage(0, "Label name is required", ResponseCodes.ValidationError));
                 }
-                var label = await _context.Labels 
+                var label = await _context.Labels
                     .FirstOrDefaultAsync(l => l.Name.ToLower() == labelName.ToLower());
                 if (label == null)
                 {
@@ -334,7 +333,7 @@ namespace PMAET_server.Services.InventoryItems
                     label = newLabel;
                 }
                 var item = await _context.InventoryItems
-                    .Include(i => i.Labels )
+                    .Include(i => i.Labels)
                     .SingleOrDefaultAsync(i => i.Id == itemId);
                 if (item == null)
                 {
@@ -342,7 +341,7 @@ namespace PMAET_server.Services.InventoryItems
                 }
                 if (item.Labels!.Any(l => l.Name == label.Name))
                 {
-                    return new Response<bool>(false, new ResponseMessage(0, "Label already assigned to this item",ResponseCodes.ValidationError));
+                    return new Response<bool>(false, new ResponseMessage(0, "Label already assigned to this item", ResponseCodes.ValidationError));
                 }
                 item.Labels.Add(label);
                 await _context.SaveChangesAsync();
@@ -354,7 +353,7 @@ namespace PMAET_server.Services.InventoryItems
             }
         }
 
-        public async Task<Response<bool>> RemoveAssignedLabelAsync(int itemId,int labelId)
+        public async Task<Response<bool>> RemoveAssignedLabelAsync(int itemId, int labelId)
         {
             try
             {
@@ -440,6 +439,155 @@ namespace PMAET_server.Services.InventoryItems
                 return new Response<List<ItemResponseDto>>(null, new ResponseMessage(0, "Failed to retrieve items", ResponseCodes.ServerError));
             }
         }
+
+
+        public async Task<Response<bool>> SetLowStockRuleAsync(int itemId, LowStockRuleDto request)
+        {
+            try
+            {
+                var item = await _context.InventoryItems
+                .Include(i => i.StockRule)
+                .FirstOrDefaultAsync(i => i.Id == itemId);
+                if (item == null)
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+                if (item.StockRule == null)
+                {
+                    var newRule = new LowStockRule
+                    {
+                        InventoryItemId = itemId,
+                        MinimumQuantity = request.Amount,
+                    };
+                    _context.LowStockRules.Add(newRule);
+                    item.StockRule = newRule;
+                    await _context.SaveChangesAsync();
+                    return new Response<bool>(true, new ResponseMessage(1, "Rule has been set successfully"));
+                }
+                else
+                {
+                    item.StockRule.MinimumQuantity = request.Amount;
+                    await _context.SaveChangesAsync();
+                    return new Response<bool>(true, new ResponseMessage(1, "Rule has been set successfully"));
+                }
+
+            }
+            catch (Exception)
+            {
+                return new Response<bool>(false, new ResponseMessage(0, "Failed to add rule", ResponseCodes.ServerError));
+            }
+        }
+        public async Task<Response<bool>> DeleteStockRuleAsync(int itemId)
+        {
+            try
+            {
+                var item = await _context.InventoryItems
+                .Include(i => i.StockRule)
+                .FirstOrDefaultAsync(i => i.Id == itemId);
+                if (item == null)
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+                if (item.StockRule != null)
+                {
+                    var StockRule = item.StockRule;
+                    _context.LowStockRules.Remove(StockRule);
+                    item.StockRule = null;
+                    await _context.SaveChangesAsync();
+                    return new Response<bool>(true, new ResponseMessage(1, "Rule has been delete successfully"));
+
+                }
+                else
+                {
+                    return new Response<bool>(false, new ResponseMessage(0, "Item has no low stock rule", ResponseCodes.NotFound));
+
+                }
+
+
+            }
+            catch (Exception)
+            {
+                return new Response<bool>(false, new ResponseMessage(0, "Failed to delete rule", ResponseCodes.ServerError));
+            }
+        }
+
+
+        public async Task<Response<List<ItemResponseDto>>> GetLowStockItemAsync(GetLowStockItemDto request)
+        {
+            try
+            {
+                var items = await _context.InventoryItems
+                    .AsNoTracking()
+                    .Include(i => i.StockRule)
+                    .Include(i => i.Inventory)
+                    .Where(i =>
+                        i.Inventory != null &&
+                        i.Inventory.UserId == request.Userid &&
+                        i.StockRule != null &&
+                        i.Quantity <= i.StockRule.MinimumQuantity)
+                    .ToListAsync();
+
+                var dtoList = new List<ItemResponseDto>();
+                dtoList.AddRange(items.Select(i => new ItemResponseDto
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Quantity = i.Quantity,
+                    Unit = i.Unit,
+                    ExpiryDate = i.ExpiryDate,
+                    NeverExpires = i.NeverExpires,
+                    PurchaseDate = i.PurchaseDate
+                }));
+                return new Response<List<ItemResponseDto>>(dtoList, new ResponseMessage(1, "Get all low quantity item successfully"));
+            }
+            catch (Exception)
+            {
+                return new Response<List<ItemResponseDto>>(null, new ResponseMessage(0, "Failed to get all low quantity item", ResponseCodes.ServerError));
+            }
+        }
+
+
+
+        public async Task<Response<LowStockRuleDto>> GetItemRuleAsync(int itemId)
+        {
+            try
+            {
+                var item = await _context.InventoryItems
+                .Include(i => i.StockRule)
+                .FirstOrDefaultAsync(i => i.Id == itemId);
+                if (item == null)
+                {
+                    return new Response<LowStockRuleDto>(null, new ResponseMessage(0, "Item not found", ResponseCodes.NotFound));
+                }
+                if (item.StockRule != null)
+                {
+                    var StockRule = new LowStockRuleDto
+                    {
+                        Amount = item.StockRule.MinimumQuantity,
+                    };
+                    return new Response<LowStockRuleDto>(StockRule, new ResponseMessage(1, "Get rule successfully"));
+
+                }
+                else
+                {
+                    return new Response<LowStockRuleDto>(null, new ResponseMessage(0, "Item has no low stock rule", ResponseCodes.NotFound));
+
+                }
+            }
+            catch (Exception)
+            {
+                return new Response<LowStockRuleDto>(null, new ResponseMessage(0, "Failed to get no low stock rule for item", ResponseCodes.ServerError));
+            }
+        }
+
+
+
+
+
+
+
+
+
     }
 
 }
