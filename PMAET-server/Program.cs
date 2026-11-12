@@ -32,7 +32,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", IResult () => app.Environment.IsDevelopment()
-    ? Results.Redirect("/swagger")
-    : Results.Ok("PMAET server is running."));
+app.MapGet("/", () => Results.Redirect("/swagger"));
 app.Run();
