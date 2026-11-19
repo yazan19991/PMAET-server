@@ -20,3 +20,5 @@ bin/
 obj/
 *.user
 /_migration_context
+/docs
+old
