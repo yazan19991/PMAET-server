@@ -19,3 +19,4 @@
 bin/
 obj/
 *.user
+/_migration_context
